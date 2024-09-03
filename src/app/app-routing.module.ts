@@ -3,6 +3,7 @@ import { HomeComponent } from "./home/home.component";
 import { CounterComponent } from "./counter/counter/counter.component";
 import { RouterModule } from "@angular/router";
 import { PostsListComponent } from "./posts/posts-list/posts-list.component";
+import { AddPostComponent } from "./posts/add-post/add-post.component";
 
 const routes = [
     {
@@ -15,7 +16,10 @@ const routes = [
     },
     {
         path:'posts',
-        component: PostsListComponent
+        component: PostsListComponent,
+        children: [
+            { path: 'add', component: AddPostComponent }
+        ]
     }
 ]
 
