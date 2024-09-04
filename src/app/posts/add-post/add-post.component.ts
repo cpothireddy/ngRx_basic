@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Posts } from 'src/app/models/posts.model';
+import { AppState } from 'src/app/store/app.state';
+import { addPost } from '../state/posts.actions';
 
 @Component({
   selector: 'app-add-post',
@@ -8,7 +12,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AddPostComponent {
   postForm: FormGroup;
-  constructor() {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
     this.postForm = new FormGroup({
@@ -36,9 +40,17 @@ export class AddPostComponent {
   }
 
   onAddPost() {
-    if(!this.postForm.valid){
+    if (!this.postForm.valid) {
       return;
     }
     console.log(this.postForm.value);
+    // id is not mandatory, since we marked it as optional in posts.model
+    const post: Posts = {
+      title: this.postForm.value.title,
+      description: this.postForm.value.description,
+    };
+
+    this.store.dispatch(addPost({ post }))
+
   }
 }

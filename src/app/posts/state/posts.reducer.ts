@@ -1,8 +1,15 @@
-import { createReducer } from "@ngrx/store";
+import { createReducer, on } from "@ngrx/store";
 import { initialPostsState } from "./posts.state";
+import { addPost } from "./posts.actions";
 
-// Here, the intenetion is to have the initial state data, Here we are not considering any action and just returning same data what we reciveied initally, and that will read through the selector.
-const _postReducer = createReducer(initialPostsState);
+const _postReducer = createReducer(initialPostsState, on(addPost, (state, action) =>{
+    let post = { ...action.post };
+    post.id = state.posts.length + 1;
+    return {
+        ...state,
+        posts: [...state.posts, post]
+    }
+}));
 
 
 export function postsReducer(state, action){
