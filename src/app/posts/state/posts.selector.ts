@@ -4,6 +4,8 @@ import { PostState } from "./posts.state";
 
 const getPostsState = createFeatureSelector<PostState>('posts');
 
+// Here, the getPosts is a selector, we are reading the state will was updated by the reducer.
+
 export const getPosts = createSelector(getPostsState, (state)=>{
     return state.posts;
-})
+});
