@@ -12,19 +12,21 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducer } from './store/app.state';
 import { EffectsModule } from '@ngrx/effects';
+import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    EffectsModule.forRoot([]) , 
+    EffectsModule.forRoot() , 
     ReactiveFormsModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(appReducer),
     AppRoutingModule,
     HttpClientModule,
     StoreDevtoolsModule.instrument({
