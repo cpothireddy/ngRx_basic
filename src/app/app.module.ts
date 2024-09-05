@@ -18,7 +18,7 @@ import { appReducer } from './store/app.state';
     HeaderComponent
   ],
   imports: [
-    BrowserModule, FormsModule, ReactiveFormsModule,StoreModule.forRoot(appReducer),
+    BrowserModule, FormsModule, ReactiveFormsModule,StoreModule.forRoot({}),
     AppRoutingModule,
     StoreDevtoolsModule.instrument({
       logOnly: !isDevMode(), // Restrict extension to log-only mode
