@@ -81,12 +81,12 @@ export class AuthEffects {
     () => {
       return this.actions$.pipe(
         ofType(autoLogin),
-        map((action) => {
+        mergeMap((action) => {
           const user = this.authService.getUserFromLocalStorage();
-          console.log(user);
+          console.log('from effect', user);
+          return of(loginSuccess({ user }));
         })
       );
-    },
-    { dispatch: false }
+    }
   );
 }
