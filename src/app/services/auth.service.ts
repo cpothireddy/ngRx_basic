@@ -1,14 +1,15 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { environment } from "src/environments/environment";
-import { AuthResponseData } from "../models/AuthResponseData.model";
-import { Observable } from "rxjs";
-import { User } from "../models/user.model";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { AuthResponseData } from '../models/AuthResponseData.model';
+import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  timeOutInterval: any;
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponseData> {
@@ -18,7 +19,7 @@ export class AuthService {
     );
   }
 
-  signUp(email:string, password:string): Observable<AuthResponseData>{
+  signUp(email: string, password: string): Observable<AuthResponseData> {
     return this.http.post<AuthResponseData>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.FIRBASE_API_KEY}`,
       { email, password, returnSecureToken: true }
@@ -49,5 +50,35 @@ export class AuthService {
       default:
         return 'Unknown User, please try again';
     }
+  }
+
+  setUserInLocalStorage(user: User) {
+    localStorage.setItem('userData', JSON.stringify(user));
+    this.runTimeOutInterval(user);
+  }
+
+  runTimeOutInterval(user: User) {
+    const todaysDate = new Date().getTime();
+    const expirationDate = user.expiryDate.getTime();
+    const timeInterval = expirationDate - todaysDate;
+
+    this.timeOutInterval = setTimeout(() => {}, timeInterval);
+  }
+
+  getUserFromLocalStorage() {
+    const userDataString = localStorage.getItem('userData');
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      const expirationDate = new Date(userData.expiryDate);
+      const user = new User(
+        userData.email,
+        userData.token,
+        userData.localId,
+        expirationDate
+      );
+      this.runTimeOutInterval(user);
+      return user;
+    }
+    return null;
   }
 }
