@@ -13,6 +13,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducer } from './store/app.state';
 import { EffectsModule } from '@ngrx/effects';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
+import { AuthEffects } from './auth/state/auth.effects';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loa
   imports: [
     BrowserModule,
     FormsModule,
-    EffectsModule.forRoot() , 
+    EffectsModule.forRoot([AuthEffects]) , 
     ReactiveFormsModule,
     StoreModule.forRoot(appReducer),
     AppRoutingModule,
