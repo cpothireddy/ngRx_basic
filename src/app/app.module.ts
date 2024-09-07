@@ -15,6 +15,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
 import { AuthEffects } from './auth/state/auth.effects';
 import { AuthTokenInterceptor } from './services/AuthToken.interceptor';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { AuthTokenInterceptor } from './services/AuthToken.interceptor';
     AppRoutingModule,
     HttpClientModule,
     StoreDevtoolsModule.instrument({
-      logOnly: !isDevMode(), // Restrict extension to log-only mode
+      logOnly: !isDevMode(),
     }),
+    StoreRouterConnectingModule.forRoot()
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:AuthTokenInterceptor, multi:true}],
   bootstrap: [AppComponent]
