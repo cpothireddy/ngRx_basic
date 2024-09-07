@@ -17,15 +17,23 @@ export class EditPostComponent implements OnInit, OnDestroy {
   post: Posts;
   postForm: FormGroup;
   postSubscription: Subscription;
-  constructor(private route: ActivatedRoute, private store: Store<AppState>, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<AppState>,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
-      this.store.select(getPostById, { id }).subscribe((data) => {
-        this.post = data;
-        this.createForm();
-      });
+      console.log('id', id);
+      this.postSubscription = this.store
+        .select(getPostById, { id })
+        .subscribe((data) => {
+          this.post = data;
+          console.log('post in edit', this.post);
+          this.createForm();
+        });
     });
   }
 
@@ -54,7 +62,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
       description,
     };
     this.store.dispatch(updatePost({ post }));
-    this.router.navigate(['./posts'])
+    this.router.navigate(['posts']);
   }
 
   ngOnDestroy() {}
