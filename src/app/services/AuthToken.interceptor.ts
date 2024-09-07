@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { exhaustMap, Observable } from 'rxjs';
+import { exhaustMap, Observable, take } from 'rxjs';
 import { AppState } from '../store/app.state';
 import { getToken } from '../auth/state/auth.selector';
 
@@ -17,7 +17,10 @@ export class AuthTokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return this.store.select(getToken).pipe(exhaustMap((token)=>{
+    // on logout action, we are making the user as null, so the user object is modyfying and the select of getToken is associated with user object, so here we are selecting getToken multiple times, whenever user gets updated so make it take(1)
+    return this.store.select(getToken).pipe(
+      take(1),
+      exhaustMap((token)=>{
         if(!token){
             return next.handle(req);
         }
