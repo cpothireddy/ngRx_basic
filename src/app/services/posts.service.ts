@@ -39,4 +39,8 @@ export class PostsService {
   deletePost(id:string) {
     return this.http.delete(`https://vue-completecourse.firebaseio.com/posts/${id}.json`);
   }
+
+  getPostById(id:string):Observable<Posts> {
+    return this.http.get<Posts>(`https://vue-completecourse.firebaseio.com/posts/${id}.json`);
+  }
 }
