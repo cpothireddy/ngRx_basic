@@ -3,8 +3,10 @@ import { initialPostsState } from './posts.state';
 import {
   addPostSuccess,
   deletePost,
+  deletePostSuccess,
   loadPostSuccess,
   updatePost,
+  updatePostSuccess,
 } from './posts.actions';
 
 const _postReducer = createReducer(
@@ -16,7 +18,7 @@ const _postReducer = createReducer(
       posts: [...state.posts, post],
     };
   }),
-  on(updatePost, (state, action) => {
+  on(updatePostSuccess, (state, action) => {
     const updatePosts = state.posts.map((post) => {
       return action.post.id === post.id ? action.post : post;
     });
@@ -25,7 +27,7 @@ const _postReducer = createReducer(
       posts: updatePosts,
     };
   }),
-  on(deletePost, (state, { id }) => {
+  on(deletePostSuccess, (state, { id }) => {
     const updatedPosts = state.posts.filter((post) => {
       return post.id !== id;
     });
