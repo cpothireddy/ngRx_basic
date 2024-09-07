@@ -24,26 +24,35 @@ export class EditPostComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      console.log('id', id);
-      this.postSubscription = this.store
-        .select(getPostById, { id })
-        .subscribe((data) => {
-          this.post = data;
-          console.log('post in edit', this.post);
-          this.createForm();
+    this.createForm();
+    this.postSubscription = this.store.select(getPostById).subscribe((post) => {
+      if (post) {
+        this.post = post;
+        this.postForm.patchValue({
+          title: post.title,
+          description: post.description,
         });
+      }
     });
+    // this.route.paramMap.subscribe((params) => {
+    //   const id = params.get('id');
+    //   console.log('id', id);
+    //   this.postSubscription = this.store
+    //     .select(getPostById, { id })
+    //     .subscribe((data) => {
+    //       this.post = data;
+    //       this.createForm();
+    //     });
+    // });
   }
 
   createForm() {
     this.postForm = new FormGroup({
-      title: new FormControl(this.post.title, [
+      title: new FormControl(null, [
         Validators.required,
         Validators.minLength(6),
       ]),
-      description: new FormControl(this.post.description, [
+      description: new FormControl(null, [
         Validators.required,
         Validators.minLength(10),
       ]),
@@ -65,5 +74,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
     this.router.navigate(['posts']);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.postSubscription.unsubscribe();
+  }
 }
